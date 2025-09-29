@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Container, Form, Input, Button } from "./Login.styled";
+import { Container, Card, Form, Input, Button, Title } from "./Login.styled";
 
 const Login: React.FC = () => {
   const [password, setPassword] = useState("");
@@ -19,16 +19,19 @@ const Login: React.FC = () => {
 
   return (
     <Container>
-      <h1>Password Vault</h1>
-      <Form onSubmit={handleSubmit}>
-        <Input
-          type="password"
-          placeholder="Enter master password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <Button type="submit">Unlock</Button>
-      </Form>
+      <Card>
+        <Title>Password Vault</Title>
+        <Form onSubmit={handleSubmit}>
+          <Input
+            type="password"
+            placeholder="Enter master password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            autoFocus
+          />
+          <Button type="submit">Unlock</Button>
+        </Form>
+      </Card>
     </Container>
   );
 };
