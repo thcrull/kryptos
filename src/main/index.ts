@@ -1,6 +1,8 @@
 import { app, shell, BrowserWindow, ipcMain } from "electron";
 import { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
+import { checkPassword } from "./lib";
+import { CheckPassword } from "@shared/types";
 
 function createWindow(): void {
   // Create the browser window.
@@ -13,10 +15,10 @@ function createWindow(): void {
     ...(process.platform === "linux" ? {} : {}),
     center: true, // center window when opening app
     title: "Kryptos",
-    frame: false,
+    // frame: false,
     vibrancy: "under-window",
     visualEffectState: "active",
-    titleBarStyle: "hidden",
+    // titleBarStyle: "hidden",
     trafficLightPosition: { x: 15, y: 10 },
     webPreferences: {
       preload: join(__dirname, "../preload/index.js"),
@@ -77,6 +79,10 @@ app.whenReady().then(() => {
 
   // IPC test
   ipcMain.on("ping", () => console.log("pong"));
+
+  ipcMain.handle("checkPassword", (_, ...args: Parameters<CheckPassword>) =>
+    checkPassword(...args)
+  );
 
   // TODO: Thomas aici dam expose la endpoints prin ipcMain
 

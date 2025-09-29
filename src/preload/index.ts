@@ -1,3 +1,4 @@
+import { CheckPassword } from "@shared/types";
 import { contextBridge, ipcRenderer } from "electron";
 
 if (!process.contextIsolated) {
@@ -7,7 +8,8 @@ if (!process.contextIsolated) {
 try {
   contextBridge.exposeInMainWorld("context", {
     locale: navigator.language,
-    // explose ipc
+    checkPassword: (...args: Parameters<CheckPassword>) =>
+      ipcRenderer.invoke("checkPassword", ...args),
   });
 
   contextBridge.exposeInMainWorld("windowControls", {
