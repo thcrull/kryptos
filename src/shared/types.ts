@@ -1,8 +1,7 @@
 export type CheckPassword = (password: string) => {
   isValid: boolean;
-  data: null | string;
+  data: null | string[];
 };
-export type GetData = (password: string) => Promise<string | null>;
 
 export type VaultItem = {
     ivBase64: string;

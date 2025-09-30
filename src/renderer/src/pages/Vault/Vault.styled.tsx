@@ -35,18 +35,20 @@ export const List = styled.div`
   gap: 1rem;
 `;
 
-export const Item = styled.div`
+export const ListItem = styled.li`
+  background: #f5f5f5;
   padding: 1rem;
-  border-radius: 8px;
-  background: #ffffff;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  border-radius: 0.5rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  font-size: 1rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+`;
 
-  strong {
-    display: block;
-    font-size: 1.1rem;
-  }
-
-  span {
-    color: #666;
-  }
+export const EmptyMessage = styled.div`
+  text-align: center;
+  color: #888;
+  font-style: italic;
+  margin-top: 2rem;
 `;

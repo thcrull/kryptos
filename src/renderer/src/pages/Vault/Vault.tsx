@@ -18,7 +18,17 @@ const Vault: React.FC = () => {
         <S.Button onClick={handleLogout}>Log out</S.Button>
       </S.Header>
 
-      <S.List>{data}</S.List>
+        <S.List>
+            {data && data.length > 0 ? (
+                data.map((item: string, index: number) => (
+                    <S.ListItem key={index}>
+                        <span>{index + 1}.</span> {item}
+                    </S.ListItem>
+                ))
+            ) : (
+                <S.EmptyMessage>Your vault is empty.</S.EmptyMessage>
+            )}
+        </S.List>
     </S.Container>
   );
 };

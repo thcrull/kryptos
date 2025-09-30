@@ -1,8 +1,8 @@
 import React, { createContext, useState, useContext, ReactNode } from "react";
 
 interface VaultContextType {
-  data: string | null;
-  setData: (data: string | null) => void;
+  data: string[] | null;
+  setData: (data: string[] | null) => void;
 }
 
 const VaultContext = createContext<VaultContextType | undefined>(undefined);
@@ -10,7 +10,7 @@ const VaultContext = createContext<VaultContextType | undefined>(undefined);
 export const VaultProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [data, setData] = useState<string | null>(null);
+  const [data, setData] = useState<string[] | null>(null);
 
   return (
     <VaultContext.Provider value={{ data, setData }}>
