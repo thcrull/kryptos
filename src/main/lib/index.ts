@@ -1,36 +1,45 @@
-// aici practic va fi logica aplicatiei
-import * as fs from 'fs';
-import * as path from 'path';
-import { homedir } from 'os'
+import * as path from "path";
+import { homedir } from "os";
+import {
+  ensureDir,
+  readdir,
+  readFile,
+  remove,
+  stat,
+  pathExists,
+  writeFile,
+} from "fs-extra";
 
-export const checkConfig = () => {
-  const filePath = path.join(`${homedir()}\\Documents\\Kryptos`, 'config.kryptos');
-
-  if (fs.existsSync(filePath)) {
-    console.log('File exists!');
-  } else {
-    console.log('File does not exist.');
-
-    createFile(filePath);
-  }
+export const getRootDir = () => {
+  return path.join(homedir(), "Documents", "Kryptos");
 };
 
-const createFile = async (filePath: string) =>  {
-  try {
-    const content = 'Hello, world!';
-    await fs.writeFile(filePath, content, { encoding: 'utf8', flag: 'w' });
-    console.log('File created successfully!');
-  } catch (err: any) {
-    if (err.code === 'EEXIST') {
-      console.log('File already exists.');
-    } else {
-      console.error('Error creating file:', err);
-    }
+const getConfigPath = () => {
+  return path.join(getRootDir(), "config.kryptos");
+};
+
+export const initRootDir = async () => {
+  await ensureDir(getRootDir());
+};
+
+export const checkConfig = async (filePath: string) => {
+  await initRootDir();
+
+  if (await pathExists(filePath)) {
+    console.log("Config already exists, skipping init.");
+    return;
   }
-}
+
+  await writeFile(filePath, "muie test", {
+    encoding: "utf8",
+  });
+
+  console.log("Vault initialized successfully!");
+};
 
 export const checkPassword = (password: string): boolean => {
-  checkConfig();
+  checkConfig(getConfigPath());
+
   console.log("suntem in backend si verificam" + password);
   return true;
 };
