@@ -1,21 +1,23 @@
 import * as path from "path";
-import { homedir } from "os";
-import { readFile, pathExists, writeFile } from "fs-extra";
+import {homedir} from "os";
+import {ensureDir, pathExists, readFile, writeFile} from "fs-extra";
 import argon2 from "argon2";
 import crypto from "crypto";
+import {VaultItem} from "@shared/types";
 
 export const getRootDir = () => {
   return path.join(homedir(), "Documents", "Kryptos");
 };
 
-const getConfigPath = () => {
-  return path.join(getRootDir(), "config.kryptos");
+const getVaultPath = () => {
+  return path.join(getRootDir(), "vault.kryptos");
 };
 
 export const checkPassword = async (
   password: string
-): Promise<{ isValid: boolean; data: null | string }> => {
-  const filePath = getConfigPath();
+): Promise<{ isValid: boolean; data: string[] | null }> => {
+  await ensureDir(getRootDir());
+  const filePath = getVaultPath();
 
   if (!(await pathExists(filePath))) {
     const hash = await argon2.hash(password, {
@@ -30,7 +32,7 @@ export const checkPassword = async (
 
     await writeFile(
       filePath,
-      JSON.stringify({ passwordHash: hash, encryptionSalt: encryptionSalt }),
+      JSON.stringify({ passwordHash: hash, encryptionSalt: encryptionSalt, data: [] }),
       {
         encoding: "utf8",
       }
@@ -40,24 +42,25 @@ export const checkPassword = async (
   }
 
   const fileContent = await readFile(filePath, "utf8");
-  const config = JSON.parse(fileContent);
-  const isValid = await argon2.verify(config.passwordHash, password);
+  const vault = JSON.parse(fileContent);
+  const isValid = await argon2.verify(vault.passwordHash, password);
 
-  const response = {
+  if(!isValid)
+    return { isValid, data: null };
+
+  return {
     isValid: isValid,
-    data: isValid ? await getData(password) : null,
+    data: await getData(password),
   };
-
-  return response;
 };
 
-export const addData = async (password: string, data: string) => {
-  const filePath = getConfigPath();
+export const addData = async (password: string, newData: string) => {
+  const filePath = getVaultPath();
 
   const fileContent = await readFile(filePath, "utf8");
-  const config = JSON.parse(fileContent);
+  const vault = JSON.parse(fileContent);
 
-  const salt = Buffer.from(config.encryptionSalt, "base64");
+  const salt = Buffer.from(vault.encryptionSalt, "base64");
   const key = await argon2.hash(password, {
     type: argon2.argon2id,
     memoryCost: 2 ** 16,
@@ -71,34 +74,34 @@ export const addData = async (password: string, data: string) => {
   const iv = crypto.randomBytes(12);
   const cipher = crypto.createCipheriv("aes-256-gcm", key, iv);
   const encrypted = Buffer.concat([
-    cipher.update(data, "utf8"),
+    cipher.update(newData, "utf8"),
     cipher.final(),
   ]);
   const tag = cipher.getAuthTag();
 
-  config.vault = {
-    ciphertext: encrypted.toString("base64"),
-    iv: iv.toString("base64"),
-    tag: tag.toString("base64"),
-  };
+  vault.data.push({
+    ivBase64: iv.toString("base64"),
+    ctBase64: encrypted.toString("base64"),
+    tagBase64: tag.toString("base64"),
+  });
 
-  await writeFile(filePath, JSON.stringify(config, null, 2), {
+  await writeFile(filePath, JSON.stringify(vault, null, 2), {
     encoding: "utf8",
   });
   console.log("Data encrypted and saved!" + encrypted.toString("base64"));
 };
 
-export const getData = async (password: string): Promise<string | null> => {
-  const filePath = getConfigPath();
+export const getData = async (password: string): Promise<string[] | null> => {
+  const filePath = getVaultPath();
   const fileContent = await readFile(filePath, "utf8");
-  const config = JSON.parse(fileContent);
+  const vault = JSON.parse(fileContent);
 
-  if (!config.vault) {
+  if (!vault.data || vault.data.length === 0) {
     console.log("Vault is empty.");
     return null;
   }
 
-  const salt = Buffer.from(config.encryptionSalt, "base64");
+  const salt = Buffer.from(vault.encryptionSalt, "base64");
 
   const key = await argon2.hash(password, {
     type: argon2.argon2id,
@@ -110,25 +113,32 @@ export const getData = async (password: string): Promise<string | null> => {
     raw: true,
   });
 
-  const { iv: ivBase64, ciphertext: ctBase64, tag: tagBase64 } = config.vault;
-  const iv = Buffer.from(ivBase64, "base64");
-  const encrypted = Buffer.from(ctBase64, "base64");
-  const tag = Buffer.from(tagBase64, "base64");
+  let decryptedVaultData: string[] = [];
+  for(let i = 0; i < vault.data.length; i++) {
+    const item: VaultItem = vault.data[i];
+    const { ivBase64, ctBase64, tagBase64 } = item;
 
-  try {
-    const decipher = crypto.createDecipheriv("aes-256-gcm", key, iv);
-    decipher.setAuthTag(tag);
-    const decrypted = Buffer.concat([
-      decipher.update(encrypted),
-      decipher.final(),
-    ]);
-    console.log("get data " + decrypted.toString("utf8"));
-    return decrypted.toString("utf8");
-  } catch (err) {
-    console.error(
-      "Failed to decrypt vault. Wrong password or corrupted data.",
-      err
-    );
-    return null;
+    const iv = Buffer.from(ivBase64, "base64");
+    const encrypted = Buffer.from(ctBase64, "base64");
+    const tag = Buffer.from(tagBase64, "base64");
+
+    try {
+      const decipher = crypto.createDecipheriv("aes-256-gcm", key, iv);
+      decipher.setAuthTag(tag);
+      const decrypted = Buffer.concat([
+        decipher.update(encrypted),
+        decipher.final(),
+      ]).toString("utf8");
+
+      console.log("get data " + i + ": " + decrypted);
+      decryptedVaultData.push(decrypted);
+    } catch (err) {
+      console.error(
+          "Failed to decrypt vault. Wrong password or corrupted data.",
+          err
+      );
+    }
   }
+
+  return decryptedVaultData;
 };
