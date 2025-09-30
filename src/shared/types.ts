@@ -3,6 +3,8 @@ export type CheckPassword = (password: string) => {
   data: null | string[];
 };
 
+export type AddData = (password: string, newData: string) => Promise<boolean>;
+
 export type VaultItem = {
     ivBase64: string;
     ctBase64: string;

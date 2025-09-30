@@ -89,9 +89,10 @@ export const addData = async (password: string, newData: string) => {
     encoding: "utf8",
   });
   console.log("Data encrypted and saved!" + encrypted.toString("base64"));
+  return true;
 };
 
-export const getData = async (password: string): Promise<string[] | null> => {
+const getData = async (password: string): Promise<string[] | null> => {
   const filePath = getVaultPath();
   const fileContent = await readFile(filePath, "utf8");
   const vault = JSON.parse(fileContent);
