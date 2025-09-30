@@ -1,8 +1,8 @@
 import { app, shell, BrowserWindow, ipcMain } from "electron";
 import { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
-import { checkPassword, addData, getData } from "./lib";
-import { CheckPassword, AddData, GetData } from "@shared/types";
+import {checkPassword, addData, getData, deleteData} from "./lib";
+import {CheckPassword, AddData, GetData, DeleteData} from "@shared/types";
 
 function createWindow(): void {
   // Create the browser window.
@@ -88,6 +88,9 @@ app.whenReady().then(() => {
   );
   ipcMain.handle("getData", (_, ...args: Parameters<GetData>) =>
     getData(...args)
+  );
+  ipcMain.handle("deleteData", (_, ...args: Parameters<DeleteData>) =>
+    deleteData(...args)
   );
 
   // TODO: Thomas aici dam expose la endpoints prin ipcMain

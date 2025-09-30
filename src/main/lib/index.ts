@@ -3,7 +3,7 @@ import { homedir } from "os";
 import { ensureDir, pathExists, readFile, writeFile } from "fs-extra";
 import argon2 from "argon2";
 import crypto from "crypto";
-import { AddData, CheckPassword, GetData, VaultItem } from "@shared/types";
+import {AddData, CheckPassword, DeleteData, GetData, VaultItem} from "@shared/types";
 
 export const getRootDir = () => {
   return path.join(homedir(), "Documents", "Kryptos");
@@ -155,3 +155,23 @@ export const getData: GetData = async (password) => {
 
   return decryptedVaultData;
 };
+
+export const deleteData: DeleteData = async (index: number) => {
+  const filePath = getVaultPath();
+
+  const fileContent = await readFile(filePath, "utf8");
+  const vault = JSON.parse(fileContent);
+
+  if(!vault.data || vault.data.length <= index || index < 0) {
+    console.error("Index out of bounds.");
+    return false;
+  }
+
+  vault.data = vault.data.filter((_, i) => i !== index);
+
+  await writeFile(filePath, JSON.stringify(vault, null, 2), {
+    encoding: "utf8",
+  });
+
+  return true;
+}

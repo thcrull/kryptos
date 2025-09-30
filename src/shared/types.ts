@@ -10,6 +10,8 @@ export type AddData = (
 
 export type GetData = (password: string | null) => Promise<null | string[]>;
 
+export type DeleteData = (index: number) => Promise<boolean>;
+
 export type VaultItem = {
   ivBase64: string;
   ctBase64: string;

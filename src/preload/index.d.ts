@@ -1,4 +1,4 @@
-import { CheckPassword, AddData, GetData } from "@shared/types";
+import { CheckPassword, AddData, GetData, DeleteData } from "@shared/types";
 
 declare global {
   interface Window {
@@ -7,6 +7,7 @@ declare global {
       checkPassword: CheckPassword;
       addData: AddData;
       getData: GetData;
+      deleteData: DeleteData;
     };
     windowControls: {
       minimize: () => void;
