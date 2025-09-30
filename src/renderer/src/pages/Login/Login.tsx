@@ -1,20 +1,31 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Container, Card, Form, Input, Button, Title } from "./Login.styled";
+import {
+  Container,
+  Card,
+  Form,
+  Input,
+  Button,
+  Title,
+  ErrorText,
+} from "./Login.styled";
+import { useVault } from "@renderer/context/VaultContext";
 
 const Login: React.FC = () => {
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { setData } = useVault();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const passwordRes = await window.context.checkPassword(password);
-
-    if (passwordRes) {
+    const result = await window.context.checkPassword(password ?? "");
+    if (result.isValid) {
+      setData(result.data);
       navigate("/vault");
     } else {
-      console.log("Invalid password");
+      setError("Invalid password. Please try again.");
     }
   };
 
@@ -26,10 +37,11 @@ const Login: React.FC = () => {
           <Input
             type="password"
             placeholder="Enter master password"
-            value={password}
+            value={password ?? ""}
             onChange={(e) => setPassword(e.target.value)}
             autoFocus
           />
+          {error && <ErrorText>{error}</ErrorText>}
           <Button type="submit">Unlock</Button>
         </Form>
       </Card>

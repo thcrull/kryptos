@@ -72,3 +72,9 @@ export const Title = styled.h1`
   text-align: center;
   letter-spacing: 0.5px;
 `;
+
+export const ErrorText = styled.span`
+  color: #ff6b6b;
+  font-size: 0.9rem;
+  text-align: center;
+`;
