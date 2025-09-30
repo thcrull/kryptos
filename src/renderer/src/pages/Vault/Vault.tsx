@@ -5,6 +5,8 @@ import * as S from "./Vault.styled";
 const Vault: React.FC = () => {
   const navigate = useNavigate();
 
+  const data = window.context.getData(password);
+
   const handleLogout = () => {
     // TODO: clear session, memory, etc.
     navigate("/");

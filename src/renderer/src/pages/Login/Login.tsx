@@ -9,11 +9,12 @@ const Login: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (password.trim() !== "") {
-      await window.context.checkPassword(password);
+    const passwordRes = await window.context.checkPassword(password);
+
+    if (passwordRes) {
       navigate("/vault");
     } else {
-      alert("Please enter your master password");
+      console.log("Invalid password");
     }
   };
 
