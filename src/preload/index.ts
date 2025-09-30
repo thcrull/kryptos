@@ -1,4 +1,4 @@
-import { CheckPassword, AddData } from "@shared/types";
+import { CheckPassword, AddData, GetData } from "@shared/types";
 import { contextBridge, ipcRenderer } from "electron";
 
 if (!process.contextIsolated) {
@@ -12,6 +12,8 @@ try {
       ipcRenderer.invoke("checkPassword", ...args),
     addData: (...args: Parameters<AddData>) =>
       ipcRenderer.invoke("addData", ...args),
+    getData: (...args: Parameters<GetData>) =>
+      ipcRenderer.invoke("getData", ...args),
   });
 
   contextBridge.exposeInMainWorld("windowControls", {

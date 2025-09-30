@@ -12,17 +12,18 @@ import {
 import { useVault } from "@renderer/context/VaultContext";
 
 const Login: React.FC = () => {
-  const [password, setPassword] = useState<string | null>(null);
+  const [inputPassword, setInputPassword] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-  const { setData } = useVault();
+  const { setData, setPassword } = useVault();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const result = await window.context.checkPassword(password ?? "");
+    const result = await window.context.checkPassword(inputPassword ?? "");
     if (result.isValid) {
       setData(result.data);
+      setPassword(inputPassword);
       navigate("/vault");
     } else {
       setError("Invalid password. Please try again.");
@@ -37,8 +38,8 @@ const Login: React.FC = () => {
           <Input
             type="password"
             placeholder="Enter master password"
-            value={password ?? ""}
-            onChange={(e) => setPassword(e.target.value)}
+            value={inputPassword ?? ""}
+            onChange={(e) => setInputPassword(e.target.value)}
             autoFocus
           />
           {error && <ErrorText>{error}</ErrorText>}

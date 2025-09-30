@@ -1,9 +1,9 @@
 import * as path from "path";
-import {homedir} from "os";
-import {ensureDir, pathExists, readFile, writeFile} from "fs-extra";
+import { homedir } from "os";
+import { ensureDir, pathExists, readFile, writeFile } from "fs-extra";
 import argon2 from "argon2";
 import crypto from "crypto";
-import {VaultItem} from "@shared/types";
+import { VaultItem } from "@shared/types";
 
 export const getRootDir = () => {
   return path.join(homedir(), "Documents", "Kryptos");
@@ -32,12 +32,17 @@ export const checkPassword = async (
 
     await writeFile(
       filePath,
-      JSON.stringify({ passwordHash: hash, encryptionSalt: encryptionSalt, data: [] }),
+      JSON.stringify({
+        passwordHash: hash,
+        encryptionSalt: encryptionSalt,
+        data: [],
+      }),
       {
         encoding: "utf8",
       }
     );
-    console.log("Vault initialized with new password.");
+
+    console.log("Vault initialized.");
     return { isValid: true, data: null };
   }
 
@@ -45,8 +50,7 @@ export const checkPassword = async (
   const vault = JSON.parse(fileContent);
   const isValid = await argon2.verify(vault.passwordHash, password);
 
-  if(!isValid)
-    return { isValid, data: null };
+  if (!isValid) return { isValid, data: null };
 
   return {
     isValid: isValid,
@@ -54,7 +58,11 @@ export const checkPassword = async (
   };
 };
 
-export const addData = async (password: string, newData: string) => {
+export const addData = async (password: string | null, newData: string) => {
+  if (!password) {
+    return false;
+  }
+
   const filePath = getVaultPath();
 
   const fileContent = await readFile(filePath, "utf8");
@@ -88,11 +96,16 @@ export const addData = async (password: string, newData: string) => {
   await writeFile(filePath, JSON.stringify(vault, null, 2), {
     encoding: "utf8",
   });
-  console.log("Data encrypted and saved!" + encrypted.toString("base64"));
   return true;
 };
 
-const getData = async (password: string): Promise<string[] | null> => {
+export const getData = async (
+  password: string | null
+): Promise<string[] | null> => {
+  if (!password) {
+    return null;
+  }
+
   const filePath = getVaultPath();
   const fileContent = await readFile(filePath, "utf8");
   const vault = JSON.parse(fileContent);
@@ -115,7 +128,7 @@ const getData = async (password: string): Promise<string[] | null> => {
   });
 
   let decryptedVaultData: string[] = [];
-  for(let i = 0; i < vault.data.length; i++) {
+  for (let i = 0; i < vault.data.length; i++) {
     const item: VaultItem = vault.data[i];
     const { ivBase64, ctBase64, tagBase64 } = item;
 
@@ -131,12 +144,11 @@ const getData = async (password: string): Promise<string[] | null> => {
         decipher.final(),
       ]).toString("utf8");
 
-      console.log("get data " + i + ": " + decrypted);
       decryptedVaultData.push(decrypted);
     } catch (err) {
       console.error(
-          "Failed to decrypt vault. Wrong password or corrupted data.",
-          err
+        "Failed to decrypt vault. Wrong password or corrupted data.",
+        err
       );
     }
   }
