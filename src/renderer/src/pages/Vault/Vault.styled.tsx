@@ -8,7 +8,6 @@ import {
 } from "@renderer/constants/constants";
 
 export const Container = styled.div`
-  max-height: 100vh;
   padding: ${SPACING.lg};
   display: flex;
   gap: ${SPACING.md};
@@ -27,33 +26,53 @@ export const Header = styled.div`
   border-bottom: 1px solid ${COLORS.glassBorder};
 `;
 
-export const List = styled.ul`
-  display: flex;
-  flex-direction: column;
-  gap: ${SPACING.md};
-  padding: 0;
-  list-style: none;
+export const Table = styled.div`
+  margin-top: ${SPACING.lg};
+  display: grid;
+  grid-template-columns: 50px 1fr 1fr 50px;
+  gap: ${SPACING.sm};
+  align-items: center;
 `;
 
-export const ListItem = styled.li`
+export const TableHeader = styled.div`
+  font-weight: 600;
+  font-family: ${FONTS.body};
+  color: ${COLORS.textSecondary};
+  padding: ${SPACING.sm} ${SPACING.md};
+  border-bottom: 1px solid ${COLORS.glassBorder};
+`;
+
+export const TableRow = styled.div`
+  display: contents;
+`;
+
+export const TableCell = styled.div`
+  padding: ${SPACING.sm} ${SPACING.md};
   background: ${COLORS.glassBg};
   border: 1px solid ${COLORS.glassBorder};
-  border-radius: ${RADIUS.md};
-  padding: ${SPACING.md};
-  display: flex;
-  gap: ${SPACING.md};
-  align-items: center;
-  font-size: 1rem;
+  border-radius: ${RADIUS.sm};
+  font-size: 0.95rem;
+  height: 100%;
   color: ${COLORS.textPrimary};
   box-shadow: ${SHADOWS.soft};
-  transition: all 0.25s ease;
-  backdrop-filter: blur(15px);
+  backdrop-filter: blur(12px);
 
-  &:hover {
-    transform: scale(1.02);
-    box-shadow: ${SHADOWS.glow};
-    background: rgba(255, 255, 255, 0.15);
+  overflow-wrap: break-word;
+  word-break: break-word;
+  white-space: normal;
+
+  &:nth-of-type(2) {
+    font-weight: 500;
   }
+  &:nth-of-type(3) {
+    font-family: monospace;
+  }
+`;
+
+export const PasswordWrapper = styled.div`
+  display: flex;
+  gap: ${SPACING.sm};
+  justify-content: space-between;
 `;
 
 export const EmptyMessage = styled.div`
@@ -92,4 +111,18 @@ export const Actions = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-top: ${SPACING.md};
+`;
+
+export const TrashButton = styled.span`
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.2s;
+  transition: scale 0.2s;
+
+  &:hover {
+    opacity: 0.7;
+    scale: 1.1;
+  }
 `;

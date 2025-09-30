@@ -6,6 +6,7 @@ import Input from "@renderer/components/Input/Input";
 import Button from "@renderer/components/Button/Button";
 import { AlertProps } from "@shared/types";
 import Alert from "@renderer/components/Alert/Alert";
+import { parseVaultData } from "@renderer/utils/vault";
 
 const Login: React.FC = () => {
   const [inputPassword, setInputPassword] = useState<string | null>(null);
@@ -20,7 +21,7 @@ const Login: React.FC = () => {
 
     const result = await window.context.checkPassword(inputPassword);
     if (result.isValid) {
-      setData(result.data);
+      setData(parseVaultData(result.data));
       setPassword(inputPassword);
       navigate("/vault");
     } else {

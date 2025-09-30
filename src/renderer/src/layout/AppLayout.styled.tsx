@@ -14,4 +14,5 @@ export const LayoutContainer = styled.div`
 export const ContentArea = styled.div`
   flex: 1;
   padding: ${SPACING.lg};
+  overflow-y: auto;
 `;

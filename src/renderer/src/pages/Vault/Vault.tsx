@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useVault } from "@renderer/context/VaultContext";
 import {
@@ -9,13 +11,18 @@ import {
   FormContainer,
   Header,
   Label,
-  List,
-  ListItem,
+  PasswordWrapper,
+  Table,
+  TableCell,
+  TableHeader,
+  TableRow,
+  TrashButton,
 } from "./Vault.styled";
 import Button from "@renderer/components/Button/Button";
 import Input from "@renderer/components/Input/Input";
 import Alert from "@renderer/components/Alert/Alert";
 import { AlertProps } from "@shared/types";
+import { parseVaultData, serializeVaultEntry } from "@renderer/utils/vault";
 
 const Vault: React.FC = () => {
   const navigate = useNavigate();
@@ -25,6 +32,14 @@ const Vault: React.FC = () => {
   const [passwordEntry, setPasswordEntry] = useState<string | null>(null);
 
   const [alert, setAlert] = useState<AlertProps | null>(null);
+
+  const [visiblePasswords, setVisiblePasswords] = useState<{
+    [key: number]: boolean;
+  }>({});
+
+  const togglePassword = (index: number) => {
+    setVisiblePasswords((prev) => ({ ...prev, [index]: !prev[index] }));
+  };
 
   const handleLogout = () => {
     setData(null);
@@ -44,20 +59,29 @@ const Vault: React.FC = () => {
     }
 
     e.preventDefault();
-    const data = `${userEntry}: ${passwordEntry}`;
-    const response = await window.context.addData(password, data);
+    const entry = { user: userEntry.trim(), password: passwordEntry.trim() };
+    const response = await window.context.addData(
+      password,
+      serializeVaultEntry(entry)
+    );
+
     if (response) {
       setUserEntry(null);
       setPasswordEntry(null);
 
       setAlert({ text: "Entry added successfully.", type: "success" });
       const data = await window.context.getData(password);
-      if (data) setData(data);
+      if (data) setData(parseVaultData(data));
 
       return;
     }
 
     setAlert({ text: "Failed to add entry. Try again.", type: "error" });
+  };
+
+  const deleteEntry = async (index: number) => {
+    // TODO: add functionality
+    return index;
   };
 
   return (
@@ -92,17 +116,45 @@ const Vault: React.FC = () => {
         </Actions>
       </FormContainer>
 
-      <List>
-        {data && data.length > 0 ? (
-          data.map((item: string, index: number) => (
-            <ListItem key={index}>
-              <span>{index + 1}.</span> {item}
-            </ListItem>
-          ))
-        ) : (
-          <EmptyMessage>Your vault is empty.</EmptyMessage>
-        )}
-      </List>
+      {data && data.length > 0 ? (
+        <Table>
+          <TableHeader>#</TableHeader>
+          <TableHeader>User</TableHeader>
+          <TableHeader>Password</TableHeader>
+          <TableHeader>{"\u00A0"}</TableHeader>
+
+          {data.map((item, index) => (
+            <TableRow key={index}>
+              <TableCell>{index + 1}</TableCell>
+              <TableCell>{item.user}</TableCell>
+              <TableCell>
+                <PasswordWrapper>
+                  <span>
+                    {visiblePasswords[index] ? item.password : "••••••••"}{" "}
+                  </span>
+                  <span
+                    onClick={() => togglePassword(index)}
+                    style={{
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    {visiblePasswords[index] ? <FaEyeSlash /> : <FaEye />}
+                  </span>
+                </PasswordWrapper>
+              </TableCell>
+              <TableCell>
+                <TrashButton onClick={() => deleteEntry(index)}>
+                  <FaTrash />
+                </TrashButton>
+              </TableCell>
+            </TableRow>
+          ))}
+        </Table>
+      ) : (
+        <EmptyMessage>Your vault is empty.</EmptyMessage>
+      )}
     </Container>
   );
 };

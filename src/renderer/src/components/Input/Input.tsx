@@ -1,5 +1,5 @@
 import { InputHTMLAttributes, FC, useState } from "react";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import {
   StyledInputWrapper,
   StyledInput,
@@ -40,7 +40,7 @@ const Input: FC<InputProps> = ({ type, error, ...props }) => {
         />
         {isPassword && (
           <StyledIcon onClick={() => setShowPassword((prev) => !prev)}>
-            {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
           </StyledIcon>
         )}
       </StyledInputWrapper>
