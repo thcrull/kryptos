@@ -1,17 +1,17 @@
 import styled from "@emotion/styled";
+import { COLORS, FONTS, SPACING } from "@renderer/constants/constants";
 
 export const LayoutContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
   width: 100%;
-  background-color: #1e1e2f;
-  color: #fff;
+  color: ${COLORS.textPrimary};
+  font-family: ${FONTS.body};
   user-select: none;
 `;
 
 export const ContentArea = styled.div`
   flex: 1;
-  padding: 20px;
-  overflow-y: auto;
+  padding: ${SPACING.lg};
 `;

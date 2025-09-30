@@ -1,4 +1,11 @@
 import styled from "@emotion/styled";
+import {
+  COLORS,
+  SPACING,
+  RADIUS,
+  SHADOWS,
+  FONTS,
+} from "@renderer/constants/constants";
 
 export const Container = styled.div`
   height: 100%;
@@ -8,73 +15,31 @@ export const Container = styled.div`
 `;
 
 export const Card = styled.div`
-  background: rgba(35, 35, 71, 0.55);
-  backdrop-filter: blur(18px) saturate(180%);
-  border-radius: 18px;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: ${RADIUS.lg};
+  background: ${COLORS.cardBg};
+  border: 1px solid ${COLORS.glassBorder};
+  box-shadow: ${SHADOWS.soft};
   min-width: 340px;
-  padding: 48px 36px;
+  padding: ${SPACING.xl} ${SPACING.lg};
   display: flex;
   flex-direction: column;
   align-items: center;
-  transition: background 0.3s;
+  backdrop-filter: blur(20px);
 `;
 
 export const Form = styled.form`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 24px;
-`;
-
-export const Input = styled.input`
-  padding: 14px;
-  border-radius: 10px;
-  border: none;
-  background: rgba(46, 46, 77, 0.7);
-  color: #fff;
-  font-size: 1rem;
-  outline: none;
-  box-shadow: 0 0 0 2px transparent;
-  transition:
-    box-shadow 0.2s,
-    background 0.2s;
-
-  &:focus {
-    box-shadow: 0 0 0 2px #6c63ff;
-    background: rgba(46, 46, 77, 0.9);
-  }
-`;
-
-export const Button = styled.button`
-  padding: 14px;
-  border-radius: 10px;
-  border: none;
-  background: linear-gradient(90deg, #6c63ff 0%, #48c6ef 100%);
-  color: #fff;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(76, 110, 245, 0.15);
-  transition: background 0.2s;
-
-  &:hover {
-    background: linear-gradient(90deg, #48c6ef 0%, #6c63ff 100%);
-  }
+  gap: ${SPACING.lg};
 `;
 
 export const Title = styled.h1`
-  margin-bottom: 28px;
-  font-size: 2.1rem;
+  margin-bottom: ${SPACING.lg};
+  font-size: 2rem;
   font-weight: 700;
-  color: #fff;
+  color: ${COLORS.textPrimary};
+  font-family: ${FONTS.heading};
   text-align: center;
   letter-spacing: 0.5px;
-`;
-
-export const ErrorText = styled.span`
-  color: #ff6b6b;
-  font-size: 0.9rem;
-  text-align: center;
 `;

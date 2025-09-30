@@ -3,7 +3,7 @@ import { homedir } from "os";
 import { ensureDir, pathExists, readFile, writeFile } from "fs-extra";
 import argon2 from "argon2";
 import crypto from "crypto";
-import { VaultItem } from "@shared/types";
+import { AddData, CheckPassword, GetData, VaultItem } from "@shared/types";
 
 export const getRootDir = () => {
   return path.join(homedir(), "Documents", "Kryptos");
@@ -13,9 +13,11 @@ const getVaultPath = () => {
   return path.join(getRootDir(), "vault.kryptos");
 };
 
-export const checkPassword = async (
-  password: string
-): Promise<{ isValid: boolean; data: string[] | null }> => {
+export const checkPassword: CheckPassword = async (password) => {
+  if (!password) {
+    return { isValid: false, data: null };
+  }
+
   await ensureDir(getRootDir());
   const filePath = getVaultPath();
 
@@ -58,7 +60,7 @@ export const checkPassword = async (
   };
 };
 
-export const addData = async (password: string | null, newData: string) => {
+export const addData: AddData = async (password, newData) => {
   if (!password) {
     return false;
   }
@@ -99,9 +101,7 @@ export const addData = async (password: string | null, newData: string) => {
   return true;
 };
 
-export const getData = async (
-  password: string | null
-): Promise<string[] | null> => {
+export const getData: GetData = async (password) => {
   if (!password) {
     return null;
   }
