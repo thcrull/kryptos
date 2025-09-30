@@ -30,8 +30,8 @@ export const StyledInput = styled.input<{
   }
 
   &:focus {
-    border-color: #00c6ff;
-    box-shadow: 0 0 6px rgba(0, 198, 255, 0.8);
+    border-color: ${COLORS.accent};
+    box-shadow: 0 0 6px ${COLORS.accent};
     outline: none;
   }
 
@@ -65,7 +65,7 @@ export const StyledIcon = styled.span`
 
   &:hover {
     opacity: 0.9;
-    color: #00c6ff;
+    color: ${COLORS.accent};
   }
 
   svg {

@@ -7,22 +7,17 @@
 
 ## Tech stack
 
-- **Electron** — desktop shell for cross-platform apps.  
-- **React + TypeScript** — modern, type-safe UI layer.  
-- **Vite** — fast build tool for the renderer.  
+- **Electron** — desktop shell for cross-platform apps.
+- **React + TypeScript** — modern, type-safe UI layer.
+- **Vite** — fast build tool for the renderer.
+
 ---
 
 ## Requirements
-- 🔒 Create/open an encrypted Vault (`.kryptos`).  
-- 🔑 Master password with **Argon2id** (or scrypt fallback).  
-- 🛡️ AES-256-GCM encryption.  
-- ⏱️ Auto-lock after timeout or system suspend.  
-- ✨ Password generator with strength meter.  
-- 📋 Secure clipboard: auto-clear after N seconds.  
-- 🔎 Searchable entries (login, card, note, 2FA seed).  
-- 💾 Import/Export (encrypted JSON, CSV with warnings).  
-- 🎨 Light/Dark mode.  
-- 🖥️ Packaged installers for Windows / macOS / Linux.  
+
+- 🔒 Create/open an encrypted Vault (`.kryptos`).
+- 🔑 Master password with **Argon2id** (or scrypt fallback).
+- 🛡️ AES-256-GCM encryption.
 
 ---
 

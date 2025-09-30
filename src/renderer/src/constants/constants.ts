@@ -7,7 +7,8 @@ export const COLORS = {
   glassBorder: "rgba(255, 255, 255, 0.15)",
   cardBg: "rgba(255, 255, 255, 0.12)",
 
-  accent: "linear-gradient(135deg, #00c6ff 0%, #0072ff 100%)",
+  accent: "#0aff99",
+
   success: "#4ade80",
   error: "#5f1010ff",
   warning: "#f59e0b",

@@ -43,7 +43,7 @@ export const StyledButton = styled.button<StyledButtonProps>`
   &:focus {
     outline: none;
     box-shadow: ${({ disabled }) =>
-      disabled ? "none" : "0 0 8px rgba(0, 198, 255, 0.8)"};
+      disabled ? "none" : `0 0 8px ${COLORS.accent}`};
   }
 `;
 

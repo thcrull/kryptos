@@ -27,7 +27,6 @@ export const Header = styled.div`
 `;
 
 export const Table = styled.div`
-  margin-top: ${SPACING.lg};
   display: grid;
   grid-template-columns: 50px 1fr 1fr 50px;
   gap: ${SPACING.sm};
@@ -85,9 +84,9 @@ export const EmptyMessage = styled.div`
 
 export const FormContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: ${SPACING.lg};
-  padding: ${SPACING.lg};
+  flex-direction: row;
+  gap: ${SPACING.md};
+  padding: ${SPACING.md};
   border-radius: ${RADIUS.lg};
   background: ${COLORS.glassBg};
   border: 1px solid ${COLORS.glassBorder};
@@ -97,6 +96,7 @@ export const FormContainer = styled.div`
 export const Field = styled.div`
   display: flex;
   flex-direction: column;
+  flex: 1;
   gap: ${SPACING.sm};
 `;
 
@@ -109,8 +109,7 @@ export const Label = styled.label`
 
 export const Actions = styled.div`
   display: flex;
-  justify-content: flex-end;
-  margin-top: ${SPACING.md};
+  margin-top: ${SPACING.lg};
 `;
 
 export const TrashButton = styled.span`
