@@ -17,6 +17,7 @@
 
 - 🔒 Create/open an encrypted Vault (`.kryptos`).
 - 🔑 Master password with **Argon2id** (or scrypt fallback).
+- 📊 Real-time password strength feedback with **zxcvbn** for master password.
 - 🛡️ AES-256-GCM encryption.
 
 ---
