@@ -7,7 +7,7 @@ import {
   getData,
   deleteData,
   vaultExists,
-  createVault,
+  createVault, getBreachStatus,
 } from "./lib";
 import {
   CheckPassword,
@@ -15,7 +15,7 @@ import {
   GetData,
   DeleteData,
   VaultExists,
-  CreateVault,
+  CreateVault, GetBreachStatus,
 } from "@shared/types";
 
 function createWindow(): void {
@@ -111,6 +111,9 @@ app.whenReady().then(() => {
   );
   ipcMain.handle("createVault", (_, ...args: Parameters<CreateVault>) =>
     createVault(...args)
+  );
+  ipcMain.handle("getBreachStatus", (_, ...args: Parameters<GetBreachStatus>) =>
+    getBreachStatus(...args)
   );
 
   createWindow();

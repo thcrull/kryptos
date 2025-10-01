@@ -4,7 +4,7 @@ import {
   GetData,
   DeleteData,
   VaultExists,
-  CreateVault,
+  CreateVault, GetBreachStatus,
 } from "@shared/types";
 import { contextBridge, ipcRenderer } from "electron";
 
@@ -27,6 +27,8 @@ try {
       ipcRenderer.invoke("vaultExists", ...args),
     createVault: (...args: Parameters<CreateVault>) =>
       ipcRenderer.invoke("createVault", ...args),
+    getBreachStatus: (...args: Parameters<GetBreachStatus>)=>
+      ipcRenderer.invoke("getBreachStatus", ...args),
   });
 
   contextBridge.exposeInMainWorld("windowControls", {

@@ -1,9 +1,5 @@
 import React, { createContext, useState, useContext, ReactNode } from "react";
-
-export interface VaultEntry {
-  user: string;
-  password: string;
-}
+import {VaultEntry} from "@shared/types";
 
 interface VaultContextType {
   data: VaultEntry[] | null;

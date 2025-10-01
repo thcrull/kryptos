@@ -1,4 +1,4 @@
-import { VaultEntry } from "@renderer/context/VaultContext";
+import {VaultEntry} from "@shared/types";
 
 export const parseVaultData = (rawData: string[] | null): VaultEntry[] => {
   if (!rawData) return [];

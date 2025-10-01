@@ -11,6 +11,8 @@ import {
   GetData,
   VaultItem,
   VaultExists,
+  VaultEntry,
+  GetBreachStatus,
 } from "@shared/types";
 
 const getRootDir = () => {
@@ -201,3 +203,39 @@ export const deleteData: DeleteData = async (index: number) => {
 
   return true;
 };
+
+export const getBreachStatus: GetBreachStatus = async (password: string) => {
+  const rawData = await getData(password)
+
+  if(!rawData || rawData.length === 0) {
+    console.log("Vault is empty.");
+    return [];
+  }
+
+  const breachStatus: boolean[] = [];
+  const decryptedData: VaultEntry[] = rawData.map((item) => JSON.parse(item));
+  for(let i = 0; i < decryptedData.length; i++) {
+    const entry = decryptedData[i];
+    const sha1PasswordHash = crypto
+        .createHash('sha1')
+        .update(entry.password)
+        .digest('hex')
+        .toUpperCase();
+
+    const hashPrefix = sha1PasswordHash.substring(0, 5);
+    const hashSuffix = sha1PasswordHash.substring(5);
+
+    const response= await fetch(`https://api.pwnedpasswords.com/range/${hashPrefix}`);
+    if(response.ok) {
+      const responseBody = await response.text();
+      const breachedPasswords: string[] = responseBody.split('\n').map((item) => item.split(':')[0]);
+      breachStatus.push(breachedPasswords.includes(hashSuffix));
+    } else {
+      console.error(`Failed to fetch data from PwnedPasswords API. Status code: ${response.status}`);
+      return null;
+    }
+  }
+
+  console.log(breachStatus);
+  return breachStatus;
+}

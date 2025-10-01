@@ -17,6 +17,7 @@ declare global {
       deleteData: DeleteData;
       vaultExists: VaultExists;
       createVault: CreateVault;
+      getBreachStatus: GetBreachStatus;
     };
     windowControls: {
       minimize: () => void;
