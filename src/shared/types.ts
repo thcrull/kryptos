@@ -10,6 +10,10 @@ export type AddData = (
 
 export type GetData = (password: string | null) => Promise<null | string[]>;
 
+export type CreateVault = (password: string | null) => Promise<boolean>;
+
+export type VaultExists = () => Promise<boolean>;
+
 export type DeleteData = (index: number) => Promise<boolean>;
 
 export type VaultItem = {

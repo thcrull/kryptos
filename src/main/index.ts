@@ -1,8 +1,8 @@
 import { app, shell, BrowserWindow, ipcMain } from "electron";
 import { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
-import {checkPassword, addData, getData, deleteData} from "./lib";
-import {CheckPassword, AddData, GetData, DeleteData} from "@shared/types";
+import {checkPassword, addData, getData, deleteData, vaultExists, createVault} from "./lib";
+import {CheckPassword, AddData, GetData, DeleteData, VaultExists, CreateVault} from "@shared/types";
 
 function createWindow(): void {
   // Create the browser window.
@@ -92,8 +92,12 @@ app.whenReady().then(() => {
   ipcMain.handle("deleteData", (_, ...args: Parameters<DeleteData>) =>
     deleteData(...args)
   );
-
-  // TODO: Thomas aici dam expose la endpoints prin ipcMain
+  ipcMain.handle("vaultExists", (_, ...args: Parameters<VaultExists>) =>
+    vaultExists(...args)
+  );
+  ipcMain.handle("createVault", (_, ...args: Parameters<CreateVault>) =>
+    createVault(...args)
+  );
 
   createWindow();
 

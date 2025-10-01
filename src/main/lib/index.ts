@@ -3,9 +3,17 @@ import { homedir } from "os";
 import { ensureDir, pathExists, readFile, writeFile } from "fs-extra";
 import argon2 from "argon2";
 import crypto from "crypto";
-import {AddData, CheckPassword, DeleteData, GetData, VaultItem} from "@shared/types";
+import {
+  AddData,
+  CheckPassword,
+  CreateVault,
+  DeleteData,
+  GetData,
+  VaultItem,
+  VaultExists
+} from "@shared/types";
 
-export const getRootDir = () => {
+const getRootDir = () => {
   return path.join(homedir(), "Documents", "Kryptos");
 };
 
@@ -13,26 +21,36 @@ const getVaultPath = () => {
   return path.join(getRootDir(), "vault.kryptos");
 };
 
-export const checkPassword: CheckPassword = async (password) => {
+export const vaultExists: VaultExists = async () => {
+  const filePath = getVaultPath();
+  return await pathExists(filePath);
+};
+
+export const createVault: CreateVault = async (password) => {
+  if(await vaultExists()) {
+    console.error("Vault already exists.");
+    return false;
+  }
+
   if (!password) {
-    return { isValid: false, data: null };
+    console.error("Password is required.");
+    return false;
   }
 
   await ensureDir(getRootDir());
   const filePath = getVaultPath();
 
-  if (!(await pathExists(filePath))) {
-    const hash = await argon2.hash(password, {
-      type: argon2.argon2id,
-      memoryCost: 2 ** 16,
-      timeCost: 3,
-      parallelism: 1,
-    });
+  const hash = await argon2.hash(password, {
+    type: argon2.argon2id,
+    memoryCost: 2 ** 16,
+    timeCost: 3,
+    parallelism: 1,
+  });
 
-    const randomSalt = crypto.randomBytes(16);
-    const encryptionSalt = randomSalt.toString("base64");
+  const randomSalt = crypto.randomBytes(16);
+  const encryptionSalt = randomSalt.toString("base64");
 
-    await writeFile(
+  await writeFile(
       filePath,
       JSON.stringify({
         passwordHash: hash,
@@ -42,11 +60,19 @@ export const checkPassword: CheckPassword = async (password) => {
       {
         encoding: "utf8",
       }
-    );
+  );
 
-    console.log("Vault initialized.");
-    return { isValid: true, data: null };
+  console.log("Vault initialized.");
+  return true;
+}
+
+export const checkPassword: CheckPassword = async (password) => {
+  if (!password) {
+    return { isValid: false, data: null };
   }
+
+  await ensureDir(getRootDir());
+  const filePath = getVaultPath();
 
   const fileContent = await readFile(filePath, "utf8");
   const vault = JSON.parse(fileContent);
