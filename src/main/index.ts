@@ -1,8 +1,22 @@
 import { app, shell, BrowserWindow, ipcMain } from "electron";
 import { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
-import {checkPassword, addData, getData, deleteData, vaultExists, createVault} from "./lib";
-import {CheckPassword, AddData, GetData, DeleteData, VaultExists, CreateVault} from "@shared/types";
+import {
+  checkPassword,
+  addData,
+  getData,
+  deleteData,
+  vaultExists,
+  createVault,
+} from "./lib";
+import {
+  CheckPassword,
+  AddData,
+  GetData,
+  DeleteData,
+  VaultExists,
+  CreateVault,
+} from "@shared/types";
 
 function createWindow(): void {
   // Create the browser window.

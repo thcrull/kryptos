@@ -10,7 +10,7 @@ import {
   DeleteData,
   GetData,
   VaultItem,
-  VaultExists
+  VaultExists,
 } from "@shared/types";
 
 const getRootDir = () => {
@@ -27,7 +27,7 @@ export const vaultExists: VaultExists = async () => {
 };
 
 export const createVault: CreateVault = async (password) => {
-  if(await vaultExists()) {
+  if (await vaultExists()) {
     console.error("Vault already exists.");
     return false;
   }
@@ -51,20 +51,20 @@ export const createVault: CreateVault = async (password) => {
   const encryptionSalt = randomSalt.toString("base64");
 
   await writeFile(
-      filePath,
-      JSON.stringify({
-        passwordHash: hash,
-        encryptionSalt: encryptionSalt,
-        data: [],
-      }),
-      {
-        encoding: "utf8",
-      }
+    filePath,
+    JSON.stringify({
+      passwordHash: hash,
+      encryptionSalt: encryptionSalt,
+      data: [],
+    }),
+    {
+      encoding: "utf8",
+    }
   );
 
   console.log("Vault initialized.");
   return true;
-}
+};
 
 export const checkPassword: CheckPassword = async (password) => {
   if (!password) {
@@ -188,7 +188,7 @@ export const deleteData: DeleteData = async (index: number) => {
   const fileContent = await readFile(filePath, "utf8");
   const vault = JSON.parse(fileContent);
 
-  if(!vault.data || vault.data.length <= index || index < 0) {
+  if (!vault.data || vault.data.length <= index || index < 0) {
     console.error("Index out of bounds.");
     return false;
   }
@@ -200,4 +200,4 @@ export const deleteData: DeleteData = async (index: number) => {
   });
 
   return true;
-}
+};

@@ -10,7 +10,7 @@ export const COLORS = {
   accent: "#0aff99",
 
   success: "#4ade80",
-  error: "#5f1010ff",
+  error: "#ff9292ff",
   warning: "#f59e0b",
   info: "#38bdf8",
 

@@ -1,4 +1,11 @@
-import { CheckPassword, AddData, GetData, DeleteData, VaultExists, CreateVault } from "@shared/types";
+import {
+  CheckPassword,
+  AddData,
+  GetData,
+  DeleteData,
+  VaultExists,
+  CreateVault,
+} from "@shared/types";
 
 declare global {
   interface Window {

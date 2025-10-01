@@ -1,4 +1,11 @@
-import {CheckPassword, AddData, GetData, DeleteData, VaultExists, CreateVault} from "@shared/types";
+import {
+  CheckPassword,
+  AddData,
+  GetData,
+  DeleteData,
+  VaultExists,
+  CreateVault,
+} from "@shared/types";
 import { contextBridge, ipcRenderer } from "electron";
 
 if (!process.contextIsolated) {
@@ -17,9 +24,9 @@ try {
     deleteData: (...args: Parameters<DeleteData>) =>
       ipcRenderer.invoke("deleteData", ...args),
     vaultExists: (...args: Parameters<VaultExists>) =>
-        ipcRenderer.invoke("vaultExists", ...args),
+      ipcRenderer.invoke("vaultExists", ...args),
     createVault: (...args: Parameters<CreateVault>) =>
-        ipcRenderer.invoke("createVault", ...args),
+      ipcRenderer.invoke("createVault", ...args),
   });
 
   contextBridge.exposeInMainWorld("windowControls", {
