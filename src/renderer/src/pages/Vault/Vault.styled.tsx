@@ -68,7 +68,7 @@ export const TableCell = styled.div`
   }
 `;
 
-export const PasswordWrapper = styled.div`
+export const CellWrapper = styled.div`
   display: flex;
   gap: ${SPACING.sm};
   justify-content: space-between;

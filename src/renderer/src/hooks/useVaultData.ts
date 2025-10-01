@@ -27,9 +27,10 @@ export const useVaultData = () => {
     if (response) {
       setUserEntry(null);
       setPasswordEntry(null);
-      setAlert({ text: "Entry added successfully.", type: "success" });
       const vaultData = await window.context.getData(password);
       if (vaultData) setData(parseVaultData(vaultData));
+
+      setAlert({ text: "Entry added successfully.", type: "success" });
       return true;
     } else {
       setAlert({ text: "Failed to add entry. Try again.", type: "error" });
@@ -38,22 +39,20 @@ export const useVaultData = () => {
   };
 
   const deleteEntry = async (index: number) => {
-    if(!data || data.length <= index || index < 0) {
+    if (!data || data.length <= index || index < 0) {
       setAlert({ text: "Index out of bounds.", type: "error" });
       return false;
     }
 
     const response = await window.context.deleteData(index);
     console.log(response);
-    if(response){
+    if (response) {
       setAlert({ text: "Entry removed successfully.", type: "success" });
       const vaultData = await window.context.getData(password);
-      if(vaultData)
-        setData(parseVaultData(vaultData));
-      else
-        setData([]);
+      if (vaultData) setData(parseVaultData(vaultData));
+      else setData([]);
       return true;
-    } else{
+    } else {
       setAlert({ text: "Failed to remove entry. Try again.", type: "error" });
       return false;
     }

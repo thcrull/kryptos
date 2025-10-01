@@ -10,7 +10,7 @@ import {
   FormContainer,
   Header,
   Label,
-  PasswordWrapper,
+  CellWrapper,
   Table,
   TableCell,
   TableHeader,
@@ -20,6 +20,7 @@ import {
 import Button from "@renderer/components/Button/Button";
 import Input from "@renderer/components/Input/Input";
 import Alert from "@renderer/components/Alert/Alert";
+import CopyText from "@renderer/components/CopyText/CopyText";
 import { useVaultData } from "@renderer/hooks/useVaultData";
 
 const Vault: React.FC = () => {
@@ -54,10 +55,10 @@ const Vault: React.FC = () => {
   };
 
   const filteredData = data
-      ?.map((entry, index) => ({ entry, originalIndex: index }))
-      .filter(({ entry }) =>
-          entry.user.toLowerCase().includes(userSearch?.toLowerCase() ?? "")
-      );
+    ?.map((entry, index) => ({ entry, originalIndex: index }))
+    .filter(({ entry }) =>
+      entry.user.toLowerCase().includes(userSearch?.toLowerCase() ?? "")
+    );
 
   return (
     <Container>
@@ -113,23 +114,41 @@ const Vault: React.FC = () => {
           {filteredData.map((item, index) => (
             <TableRow key={index}>
               <TableCell>{index + 1}</TableCell>
-              <TableCell>{item.entry.user}</TableCell>
               <TableCell>
-                <PasswordWrapper>
+                <CellWrapper>
+                  <span>{item.entry.user}</span>
+                  <CopyText
+                    sameRow
+                    onClick={() => {
+                      navigator.clipboard.writeText(item.entry.user);
+                    }}
+                  />
+                </CellWrapper>
+              </TableCell>
+              <TableCell>
+                <CellWrapper>
                   <span>
                     {visiblePasswords[index] ? item.entry.password : "••••••••"}
                   </span>
-                  <span
-                    onClick={() => togglePassword(index)}
-                    style={{
-                      cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    {visiblePasswords[index] ? <FaEyeSlash /> : <FaEye />}
-                  </span>
-                </PasswordWrapper>
+                  <CellWrapper>
+                    <CopyText
+                      sameRow
+                      onClick={() => {
+                        navigator.clipboard.writeText(item.entry.password);
+                      }}
+                    />
+                    <span
+                      onClick={() => togglePassword(index)}
+                      style={{
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      {visiblePasswords[index] ? <FaEyeSlash /> : <FaEye />}
+                    </span>
+                  </CellWrapper>
+                </CellWrapper>
               </TableCell>
               <TableCell>
                 <TrashButton onClick={() => deleteEntry(item.originalIndex)}>
