@@ -5,7 +5,7 @@ import {
   RADIUS,
   FONTS,
   SHADOWS,
-} from "@renderer/constants/constants";
+} from "@renderer/constants/styling";
 
 export const StyledLoaderContainer = styled.div`
   display: flex;

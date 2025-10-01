@@ -1,41 +1,42 @@
-import { FC, ReactNode, useEffect, useState } from "react";
-import {
-  ContentArea,
-  LayoutContainer,
-  LoaderContainer,
-} from "./AppLayout.styled";
+import { FC, ReactNode, useEffect, useRef } from "react";
+import { ContentArea, LayoutContainer } from "./AppLayout.styled";
 import TitleBar from "@renderer/components/TitleBar/TitleBar";
 import { useNavigate } from "react-router-dom";
-import Loader from "@renderer/components/Loader/Loader";
+import { useVault } from "@renderer/context/VaultContext";
+import { AUTO_LOGOUT_TIME } from "@renderer/constants/config";
 
 interface AppLayoutProps {
   children: ReactNode;
 }
 
 const AppLayout: FC<AppLayoutProps> = ({ children }) => {
-  const [vaultExists, setVaultExists] = useState<boolean | null>(null);
   const navigate = useNavigate();
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const { clearSession } = useVault();
 
   useEffect(() => {
-    const checkVault = async () => {
-      const exists = await window.context.vaultExists();
-      setVaultExists(exists);
-      if (exists) {
-        navigate("/login", { replace: true });
-      } else {
-        navigate("/register", { replace: true });
-      }
+    const resetTimer = () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      timerRef.current = setTimeout(() => {
+        clearSession();
+        navigate("/", { replace: true });
+      }, AUTO_LOGOUT_TIME);
     };
-    checkVault();
-  }, []);
 
-  if (vaultExists === null) {
-    return (
-      <LoaderContainer>
-        <Loader />
-      </LoaderContainer>
-    );
-  }
+    resetTimer();
+
+    window.addEventListener("mousemove", resetTimer);
+    window.addEventListener("keydown", resetTimer);
+    window.addEventListener("click", resetTimer);
+
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      window.removeEventListener("mousemove", resetTimer);
+      window.removeEventListener("keydown", resetTimer);
+      window.removeEventListener("click", resetTimer);
+    };
+  }, [navigate]);
 
   return (
     <LayoutContainer>

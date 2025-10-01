@@ -10,6 +10,7 @@ interface VaultContextType {
   setData: (data: VaultEntry[] | null) => void;
   password: string | null;
   setPassword: (password: string | null) => void;
+  clearSession: () => void;
 }
 
 const VaultContext = createContext<VaultContextType | undefined>(undefined);
@@ -20,8 +21,15 @@ export const VaultProvider: React.FC<{ children: ReactNode }> = ({
   const [data, setData] = useState<VaultEntry[] | null>(null);
   const [password, setPassword] = useState<string | null>(null);
 
+  const clearSession = () => {
+    setData(null);
+    setPassword(null);
+  };
+
   return (
-    <VaultContext.Provider value={{ data, setData, password, setPassword }}>
+    <VaultContext.Provider
+      value={{ data, setData, password, setPassword, clearSession }}
+    >
       {children}
     </VaultContext.Provider>
   );

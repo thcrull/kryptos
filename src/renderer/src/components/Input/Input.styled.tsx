@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { COLORS, SPACING, RADIUS } from "@renderer/constants/constants";
+import { COLORS, SPACING, RADIUS } from "@renderer/constants/styling";
 
 export const StyledInputWrapper = styled.div`
   position: relative;

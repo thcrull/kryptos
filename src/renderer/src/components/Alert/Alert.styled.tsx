@@ -1,10 +1,5 @@
 import styled from "@emotion/styled";
-import {
-  COLORS,
-  SPACING,
-  RADIUS,
-  SHADOWS,
-} from "@renderer/constants/constants";
+import { COLORS, SPACING, RADIUS, SHADOWS } from "@renderer/constants/styling";
 
 type AlertContainerProps = {
   type?: "error" | "info" | "success";

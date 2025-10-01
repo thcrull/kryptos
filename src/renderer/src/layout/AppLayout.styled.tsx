@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { COLORS, FONTS, SPACING } from "@renderer/constants/constants";
+import { COLORS, FONTS, SPACING } from "@renderer/constants/styling";
 
 export const LayoutContainer = styled.div`
   display: flex;
@@ -15,16 +15,4 @@ export const ContentArea = styled.div`
   flex: 1;
   padding: ${SPACING.lg};
   overflow-y: auto;
-`;
-
-export const LoaderContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  width: 100%;
-  color: ${COLORS.textPrimary};
-  font-family: ${FONTS.body};
-  user-select: none;
 `;

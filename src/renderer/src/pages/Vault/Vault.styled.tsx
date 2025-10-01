@@ -5,7 +5,7 @@ import {
   RADIUS,
   SHADOWS,
   FONTS,
-} from "@renderer/constants/constants";
+} from "@renderer/constants/styling";
 
 export const Container = styled.div`
   padding: ${SPACING.lg};

@@ -5,7 +5,7 @@ import {
   RADIUS,
   SHADOWS,
   SPACING,
-} from "@renderer/constants/constants";
+} from "@renderer/constants/styling";
 
 export const Container = styled.div`
   height: 100%;

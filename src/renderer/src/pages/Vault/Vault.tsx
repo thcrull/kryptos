@@ -34,8 +34,7 @@ const Vault: React.FC = () => {
     alert,
     addEntry,
     deleteEntry,
-    setPassword,
-    setData,
+    clearSession,
     userSearch,
     setUserSearch,
   } = useVaultData();
@@ -49,8 +48,7 @@ const Vault: React.FC = () => {
   };
 
   const handleLogout = () => {
-    setData(null);
-    setPassword(null);
+    clearSession();
     navigate("/");
   };
 

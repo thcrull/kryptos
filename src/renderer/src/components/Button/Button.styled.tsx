@@ -1,10 +1,5 @@
 import styled from "@emotion/styled";
-import {
-  COLORS,
-  RADIUS,
-  SPACING,
-  SHADOWS,
-} from "@renderer/constants/constants";
+import { COLORS, RADIUS, SPACING, SHADOWS } from "@renderer/constants/styling";
 
 type StyledButtonProps = {
   disabled?: boolean;

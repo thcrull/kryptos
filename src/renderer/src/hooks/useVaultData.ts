@@ -4,7 +4,7 @@ import { parseVaultData, serializeVaultEntry } from "@renderer/utils/vault";
 import { AlertProps } from "@shared/types";
 
 export const useVaultData = () => {
-  const { data, setData, password, setPassword } = useVault();
+  const { data, setData, password, clearSession } = useVault();
 
   const [userEntry, setUserEntry] = useState<string | null>(null);
   const [passwordEntry, setPasswordEntry] = useState<string | null>(null);
@@ -67,8 +67,7 @@ export const useVaultData = () => {
     alert,
     addEntry,
     deleteEntry,
-    setPassword,
-    setData,
+    clearSession,
     userSearch,
     setUserSearch,
   };
