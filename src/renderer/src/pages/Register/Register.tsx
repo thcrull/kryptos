@@ -16,6 +16,7 @@ import {
   StrengthText,
   Title,
 } from "./Register.styled";
+import { STRENGTH_LABELS } from "@renderer/constants/config";
 
 const Register: React.FC = () => {
   const [password, setPassword] = useState("");
@@ -90,11 +91,7 @@ const Register: React.FC = () => {
                 <StrengthBarFill score={passwordStrength.score} />
               </StrengthBarWrapper>
               <StrengthText score={passwordStrength.score}>
-                {
-                  ["Too weak", "Weak", "Fair", "Good", "Strong"][
-                    passwordStrength.score
-                  ]
-                }
+                {STRENGTH_LABELS[passwordStrength.score]}
               </StrengthText>
             </StrengthContainer>
           )}

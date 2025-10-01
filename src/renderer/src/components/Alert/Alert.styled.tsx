@@ -1,8 +1,9 @@
 import styled from "@emotion/styled";
 import { COLORS, SPACING, RADIUS, SHADOWS } from "@renderer/constants/styling";
+import { warn } from "console";
 
 type AlertContainerProps = {
-  type?: "error" | "info" | "success";
+  type?: "error" | "info" | "success" | "warning";
 };
 
 const alertColors = {
@@ -23,6 +24,12 @@ const alertColors = {
     border: "rgba(56, 189, 248, 0.4)",
     glow: "0 0 8px rgba(56, 189, 248, 0.6)",
     text: COLORS.info,
+  },
+  warning: {
+    bg: "rgba(234, 179, 8, 0.15)",
+    border: "rgba(234, 179, 8, 0.4)",
+    glow: "0 0 8px rgba(234, 179, 8, 0.6)",
+    text: COLORS.warning,
   },
 };
 

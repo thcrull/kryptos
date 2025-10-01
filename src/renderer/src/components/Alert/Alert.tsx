@@ -3,7 +3,7 @@ import { AlertContainer } from "./Alert.styled";
 
 type AlertProps = {
   text: string;
-  type?: "error" | "info" | "success";
+  type?: "error" | "info" | "success" | "warning";
 };
 
 const Alert: FC<AlertProps> = ({ text, type }) => {

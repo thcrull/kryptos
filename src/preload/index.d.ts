@@ -5,6 +5,7 @@ import {
   DeleteData,
   VaultExists,
   CreateVault,
+  GetBreachStatus,
 } from "@shared/types";
 
 declare global {

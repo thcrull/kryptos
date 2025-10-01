@@ -61,7 +61,7 @@ const Vault: React.FC = () => {
   return (
     <Container>
       <Header>
-        <h2>Your Vault</h2>
+        <Button onClick={() => navigate("/analytics")}>Analytics</Button>
         <Button onClick={handleLogout}>Log out</Button>
       </Header>
 

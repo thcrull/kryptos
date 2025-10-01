@@ -4,6 +4,7 @@ import Vault from "./pages/Vault/Vault";
 import AppLayout from "./layout/AppLayout";
 import Register from "./pages/Register/Register";
 import Locked from "./pages/Locked/Locked";
+import Analytics from "./pages/Analytics/Analytics";
 
 const App = (): JSX.Element => {
   return (
@@ -14,6 +15,7 @@ const App = (): JSX.Element => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/vault" element={<Vault />} />
+          <Route path="/analytics" element={<Analytics />} />
         </Routes>
       </AppLayout>
     </BrowserRouter>
