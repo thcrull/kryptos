@@ -9,7 +9,7 @@ import Alert from "@renderer/components/Alert/Alert";
 import { parseVaultData } from "@renderer/utils/vault";
 
 const Login: React.FC = () => {
-  const [inputPassword, setInputPassword] = useState<string | null>(null);
+  const [inputPassword, setInputPassword] = useState("");
   const navigate = useNavigate();
   const { setData, setPassword } = useVault();
 
@@ -42,7 +42,7 @@ const Login: React.FC = () => {
           <Input
             type="password"
             placeholder="Enter vault password"
-            value={inputPassword ?? ""}
+            value={inputPassword}
             onChange={(e) => setInputPassword(e.target.value)}
             autoFocus
           />

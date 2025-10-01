@@ -1,4 +1,4 @@
-export type CheckPassword = (password: string | null) => Promise<{
+export type CheckPassword = (password: string) => Promise<{
   isValid: boolean;
   data: null | string[];
 }>;
