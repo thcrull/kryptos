@@ -16,7 +16,9 @@ export type VaultExists = () => Promise<boolean>;
 
 export type DeleteData = (index: number) => Promise<boolean>;
 
-export type GetBreachStatus = (password: string) => Promise<boolean[] | null>;
+export type GetBreachStatus = (
+  password: string | null
+) => Promise<boolean[] | null>;
 
 export type VaultItem = {
   ivBase64: string;

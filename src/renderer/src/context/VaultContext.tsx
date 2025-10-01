@@ -1,9 +1,9 @@
 import React, { createContext, useState, useContext, ReactNode } from "react";
-import {VaultEntry} from "@shared/types";
+import { VaultEntry } from "@shared/types";
 
 interface VaultContextType {
-  data: VaultEntry[] | null;
-  setData: (data: VaultEntry[] | null) => void;
+  data: VaultEntry[];
+  setData: (data: VaultEntry[]) => void;
   password: string | null;
   setPassword: (password: string | null) => void;
   clearSession: () => void;
@@ -14,11 +14,11 @@ const VaultContext = createContext<VaultContextType | undefined>(undefined);
 export const VaultProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [data, setData] = useState<VaultEntry[] | null>(null);
+  const [data, setData] = useState<VaultEntry[]>([]);
   const [password, setPassword] = useState<string | null>(null);
 
   const clearSession = () => {
-    setData(null);
+    setData([]);
     setPassword(null);
   };
 

@@ -17,48 +17,58 @@ import {
 import Button from "@renderer/components/Button/Button";
 import { useVault } from "@renderer/context/VaultContext";
 import zxcvbn from "zxcvbn";
-import { useMemo } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { STRENGTH_LABELS } from "@renderer/constants/config";
 
 const Analytics = () => {
   const navigate = useNavigate();
   const { data, password } = useVault();
 
-  const vaultData = useMemo(() => data ?? [], [data]);
+  const [breachStatus, setBreachStatus] = useState<boolean[]>([]);
 
-  // Breach status for each entry
-  const breachedStatus = useMemo(
-    () => vaultData.map(() => window.context.getBreachStatus(password ?? "")),
-    [vaultData]
-  );
+  useEffect(() => {
+    let isMounted = true;
 
-  // Password strength for each entry
+    const fetchBreachStatus = async () => {
+      const result = await window.context.getBreachStatus(password);
+      if (result && isMounted) {
+        setBreachStatus(result);
+      }
+    };
+
+    if (password) fetchBreachStatus();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [password]);
+
   const strengthScores = useMemo(
-    () => vaultData.map((entry) => zxcvbn(entry.password).score),
-    [vaultData]
+    () => data.map((entry) => zxcvbn(entry.password).score),
+    [data]
   );
 
   const weakPasswords = useMemo(
-    () => vaultData.filter((_, idx) => strengthScores[idx] < 3),
-    [vaultData, strengthScores]
+    () => data.filter((_, idx) => strengthScores[idx] < 3),
+    [data, strengthScores]
   );
 
   const passwordCounts = useMemo(() => {
     const counts: Record<string, number> = {};
-    vaultData.forEach((entry) => {
+    data.forEach((entry) => {
       counts[entry.password] = (counts[entry.password] || 0) + 1;
     });
     return counts;
-  }, [vaultData]);
+  }, [data]);
 
   const duplicatePasswords = useMemo(
-    () => vaultData.filter((entry) => passwordCounts[entry.password] > 1),
-    [vaultData, passwordCounts]
+    () => data.filter((entry) => passwordCounts[entry.password] > 1),
+    [data, passwordCounts]
   );
 
   const breachedPasswords = useMemo(
-    () => vaultData.filter((_, idx) => breachedStatus[idx]),
-    [vaultData, breachedStatus]
+    () => data.filter((_, idx) => breachStatus[idx]),
+    [data, breachStatus]
   );
 
   return (
@@ -71,7 +81,7 @@ const Analytics = () => {
         <StatsGrid>
           <StatCard>
             <StatTitle>Total Entries</StatTitle>
-            <StatValue>{vaultData.length}</StatValue>
+            <StatValue>{data.length}</StatValue>
           </StatCard>
           <StatCard>
             <StatTitle>Weak Passwords</StatTitle>
@@ -111,9 +121,9 @@ const Analytics = () => {
             <Title>Weak Passwords</Title>
             {weakPasswords.map((entry, idx) => (
               <PasswordItem key={idx} weak>
-                <span>{entry.user}</span>
+                <span>{entry.password}</span>
                 <StrengthLabel>
-                  {STRENGTH_LABELS[strengthScores[vaultData.indexOf(entry)]]}
+                  {STRENGTH_LABELS[strengthScores[data.indexOf(entry)]]}
                 </StrengthLabel>
               </PasswordItem>
             ))}
@@ -125,9 +135,9 @@ const Analytics = () => {
             <Title>Breached Passwords</Title>
             {breachedPasswords.map((entry, idx) => (
               <PasswordItem key={idx} breached>
-                <span>{entry.user}</span>
+                <span>{entry.password}</span>
                 <StrengthLabel>
-                  {STRENGTH_LABELS[strengthScores[vaultData.indexOf(entry)]]}
+                  {STRENGTH_LABELS[strengthScores[data.indexOf(entry)]]}
                 </StrengthLabel>
               </PasswordItem>
             ))}
