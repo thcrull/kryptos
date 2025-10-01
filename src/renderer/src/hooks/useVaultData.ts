@@ -12,14 +12,6 @@ export const useVaultData = () => {
 
   const [userSearch, setUserSearch] = useState<string | null>(null);
 
-  const searchUser = async () => {
-    if (!userSearch) {
-      setAlert({ text: "user is required.", type: "error" });
-    }
-
-    // TODO: implement search
-  };
-
   const addEntry = async () => {
     if (!userEntry?.trim() || !passwordEntry?.trim()) {
       setAlert({ text: "Both fields are required.", type: "error" });
@@ -80,6 +72,5 @@ export const useVaultData = () => {
     setData,
     userSearch,
     setUserSearch,
-    searchUser,
   };
 };

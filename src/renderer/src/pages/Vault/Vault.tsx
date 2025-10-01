@@ -37,7 +37,6 @@ const Vault: React.FC = () => {
     setData,
     userSearch,
     setUserSearch,
-    searchUser,
   } = useVaultData();
 
   const [visiblePasswords, setVisiblePasswords] = useState<{
@@ -53,6 +52,12 @@ const Vault: React.FC = () => {
     setPassword(null);
     navigate("/");
   };
+
+  const filteredData = data
+      ?.map((entry, index) => ({ entry, originalIndex: index }))
+      .filter(({ entry }) =>
+          entry.user.toLowerCase().includes(userSearch?.toLowerCase() ?? "")
+      );
 
   return (
     <Container>
@@ -96,25 +101,23 @@ const Vault: React.FC = () => {
             onChange={(e) => setUserSearch(e.target.value)}
           />
         </Field>
-
-        <Button onClick={searchUser}>Search</Button>
       </FormContainer>
 
-      {data && data.length > 0 ? (
+      {filteredData && filteredData.length > 0 ? (
         <Table>
           <TableHeader>#</TableHeader>
           <TableHeader>User</TableHeader>
           <TableHeader>Password</TableHeader>
           <TableHeader>{"\u00A0"}</TableHeader>
 
-          {data.map((item, index) => (
+          {filteredData.map((item, index) => (
             <TableRow key={index}>
               <TableCell>{index + 1}</TableCell>
-              <TableCell>{item.user}</TableCell>
+              <TableCell>{item.entry.user}</TableCell>
               <TableCell>
                 <PasswordWrapper>
                   <span>
-                    {visiblePasswords[index] ? item.password : "••••••••"}
+                    {visiblePasswords[index] ? item.entry.password : "••••••••"}
                   </span>
                   <span
                     onClick={() => togglePassword(index)}
@@ -129,7 +132,7 @@ const Vault: React.FC = () => {
                 </PasswordWrapper>
               </TableCell>
               <TableCell>
-                <TrashButton onClick={() => deleteEntry(index)}>
+                <TrashButton onClick={() => deleteEntry(item.originalIndex)}>
                   <FaTrash />
                 </TrashButton>
               </TableCell>
