@@ -19,7 +19,7 @@ export const Card = styled.div`
   background: ${COLORS.cardBg};
   border: 1px solid ${COLORS.glassBorder};
   box-shadow: ${SHADOWS.soft};
-  min-width: 340px;
+  width: 400px;
   padding: ${SPACING.xl} ${SPACING.lg};
   display: flex;
   flex-direction: column;
